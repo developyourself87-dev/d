@@ -64,7 +64,7 @@ const Home = () => {
         supabase.from('trainer_profile').select('*').single(),
         supabase.from('works').select('*').eq('is_visible', true).order('sort_order'),
         supabase.from('comments').select('*').eq('status', 'approved').order('created_at', { ascending: false }).limit(6),
-        supabase.from('site_settings').select('profile_shape').single()
+        supabase.from('site_settings').select('*').single()
       ]);
       if (trainerData) setTrainer(trainerData);
       if (worksData) setWorks(worksData);
