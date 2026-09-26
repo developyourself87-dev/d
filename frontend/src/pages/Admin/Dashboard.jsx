@@ -162,8 +162,12 @@ const Dashboard = () => {
   const saveSettings = async (e) => {
     e.preventDefault();
     try {
-      await supabaseAdmin.from('site_settings').update(siteSettings).eq('id', siteSettings.id);
-      await supabaseAdmin.from('trainer_profile').update(trainerProfile).eq('id', trainerProfile.id);
+      const { error: err1 } = await supabaseAdmin.from('site_settings').update(siteSettings).eq('id', siteSettings.id);
+      if (err1) throw err1;
+      
+      const { error: err2 } = await supabaseAdmin.from('trainer_profile').update(trainerProfile).eq('id', trainerProfile.id);
+      if (err2) throw err2;
+      
       alert("تم حفظ كافة الإعدادات بنجاح!");
     } catch (error) {
       alert("خطأ أثناء الحفظ: " + error.message);
