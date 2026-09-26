@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabaseAdmin } from '../../services/supabaseAdmin';
+import { supabase } from '../../services/supabase';
 import { supabase } from '../../services/supabase';
 
 const Dashboard = () => {
@@ -93,12 +93,12 @@ const Dashboard = () => {
       if (activeTab === 'overview') {
         const fetchCount = async (table) => {
           try {
-            const { count, error } = await supabaseAdmin.from(table).select('*', { count: 'exact', head: true });
+            const { count, error } = await supabase.from(table).select('*', { count: 'exact', head: true });
             if (error) throw error;
             return count || 0;
           } catch (e) {
             console.error(`Error fetching count for ${table}:`, e);
-            const { data } = await supabaseAdmin.from(table).select('id');
+            const { data } = await supabase.from(table).select('id');
             return data ? data.length : 0;
           }
         };
@@ -114,30 +114,30 @@ const Dashboard = () => {
 
         setStats({ courses, registrations, comments, surveys, surveySubs, works });
       } else if (activeTab === 'courses') {
-        const { data } = await supabaseAdmin.from('courses').select('*').order('sort_order');
+        const { data } = await supabase.from('courses').select('*').order('sort_order');
         setCourses(data || []);
       } else if (activeTab === 'surveys') {
-        const { data, error } = await supabaseAdmin.from('surveys').select('*');
+        const { data, error } = await supabase.from('surveys').select('*');
         if (error) console.error('Surveys fetch error:', error);
         setSurveys(data || []);
       } else if (activeTab === 'works') {
-        const { data } = await supabaseAdmin.from('works').select('*').order('sort_order');
+        const { data } = await supabase.from('works').select('*').order('sort_order');
         setWorks(data || []);
       } else if (activeTab === 'comments') {
-        const { data } = await supabaseAdmin.from('comments').select('*').order('created_at', { ascending: false });
+        const { data } = await supabase.from('comments').select('*').order('created_at', { ascending: false });
         setComments(data || []);
       } else if (activeTab === 'archive') {
         const [cRes, sRes] = await Promise.all([
-          supabaseAdmin.from('courses').select('*').order('sort_order'),
-          supabaseAdmin.from('surveys').select('*')
+          supabase.from('courses').select('*').order('sort_order'),
+          supabase.from('surveys').select('*')
         ]);
         setCourses(cRes.data || []);
         setSurveys(sRes.data || []);
       } else if (activeTab === 'settings') {
         const [setRes, profRes, langRes] = await Promise.all([
-          supabaseAdmin.from('site_settings').select('*').single(),
-          supabaseAdmin.from('trainer_profile').select('*').single(),
-          supabaseAdmin.from('site_languages').select('*').order('created_at')
+          supabase.from('site_settings').select('*').single(),
+          supabase.from('trainer_profile').select('*').single(),
+          supabase.from('site_languages').select('*').order('created_at')
         ]);
         if (setRes.data) {
           if (!setRes.data.translations) setRes.data.translations = {};
@@ -162,10 +162,10 @@ const Dashboard = () => {
   const saveSettings = async (e) => {
     e.preventDefault();
     try {
-      const { error: err1 } = await supabaseAdmin.from('site_settings').update(siteSettings).eq('id', siteSettings.id);
+      const { error: err1 } = await supabase.from('site_settings').update(siteSettings).eq('id', siteSettings.id);
       if (err1) throw err1;
       
-      const { error: err2 } = await supabaseAdmin.from('trainer_profile').update(trainerProfile).eq('id', trainerProfile.id);
+      const { error: err2 } = await supabase.from('trainer_profile').update(trainerProfile).eq('id', trainerProfile.id);
       if (err2) throw err2;
       
       alert("تم حفظ كافة الإعدادات بنجاح!");
@@ -178,7 +178,7 @@ const Dashboard = () => {
     e.preventDefault();
     if (!newLang.code || !newLang.name) return;
     try {
-      const { error } = await supabaseAdmin.from('site_languages').insert([{ code: newLang.code.toLowerCase(), name: newLang.name, is_default: false }]);
+      const { error } = await supabase.from('site_languages').insert([{ code: newLang.code.toLowerCase(), name: newLang.name, is_default: false }]);
       if (error) throw error;
       setNewLang({ code: '', name: '' });
       fetchData();
@@ -213,11 +213,11 @@ const Dashboard = () => {
       if (!workData.achievement_date) workData.achievement_date = null;
 
       if (workData.id) {
-        const { error } = await supabaseAdmin.from('works').update(workData).eq('id', workData.id);
+        const { error } = await supabase.from('works').update(workData).eq('id', workData.id);
         if (error) throw error;
       } else {
         delete workData.id; // Extremely important to avoid "null value in column id" error
-        const { error } = await supabaseAdmin.from('works').insert([workData]);
+        const { error } = await supabase.from('works').insert([workData]);
         if (error) throw error;
       }
       setIsEditingWork(false); 
@@ -227,7 +227,7 @@ const Dashboard = () => {
       alert("حدث خطأ أثناء حفظ الإنجاز: " + error.message);
     }
   };
-  const deleteWork = async (id) => { if(window.confirm('حذف الإنجاز نهائياً؟')) { await supabaseAdmin.from('works').delete().eq('id', id); fetchData(); } };
+  const deleteWork = async (id) => { if(window.confirm('حذف الإنجاز نهائياً؟')) { await supabase.from('works').delete().eq('id', id); fetchData(); } };
 
   // --- COURSES CRUD (Restored Info) ---
   const saveCourse = async (e) => {
@@ -238,11 +238,11 @@ const Dashboard = () => {
       if (!courseData.course_date) courseData.course_date = null; // Fix postgres date error
       
       if (courseData.id) {
-        const { error } = await supabaseAdmin.from('courses').update(courseData).eq('id', courseData.id);
+        const { error } = await supabase.from('courses').update(courseData).eq('id', courseData.id);
         if (error) throw error;
       } else {
         delete courseData.id; // Prevent null ID error
-        const { error } = await supabaseAdmin.from('courses').insert([courseData]);
+        const { error } = await supabase.from('courses').insert([courseData]);
         if (error) throw error;
       }
       setIsEditingCourse(false); 
@@ -251,28 +251,28 @@ const Dashboard = () => {
       alert("حدث خطأ أثناء حفظ الدورة: " + error.message);
     }
   };
-  const deleteCourse = async (id) => { if(window.confirm('حذف الدورة؟')) { await supabaseAdmin.from('courses').delete().eq('id', id); fetchData(); } };
+  const deleteCourse = async (id) => { if(window.confirm('حذف الدورة؟')) { await supabase.from('courses').delete().eq('id', id); fetchData(); } };
 
   const loadCourseBuilder = async (item) => {
     setManagingCourseQuestionsFor(item);
-    const { data } = await supabaseAdmin.from('registration_questions').select(`*, question_options(*)`).eq('course_id', item.id).order('sort_order');
+    const { data } = await supabase.from('registration_questions').select(`*, question_options(*)`).eq('course_id', item.id).order('sort_order');
     setCourseQuestions(data || []);
   };
   const saveCourseQuestion = async (e) => {
     e.preventDefault();
-    const { data: qData } = await supabaseAdmin.from('registration_questions').insert([{
+    const { data: qData } = await supabase.from('registration_questions').insert([{
       course_id: managingCourseQuestionsFor.id, question_text: newCourseQuestion.question_text, question_type: newCourseQuestion.question_type, is_required: newCourseQuestion.is_required
     }]).select().single();
 
     if (qData && newCourseQuestion.question_type === 'single_choice') {
       const opts = newCourseQuestion.optionsStr.split(',').map(o => o.trim()).filter(o => o);
-      if (opts.length > 0) await supabaseAdmin.from('question_options').insert(opts.map((opt, idx) => ({ question_id: qData.id, option_text: opt, sort_order: idx })));
+      if (opts.length > 0) await supabase.from('question_options').insert(opts.map((opt, idx) => ({ question_id: qData.id, option_text: opt, sort_order: idx })));
     }
     setNewCourseQuestion({ question_text: '', question_type: 'short_text', is_required: true, optionsStr: '' });
     loadCourseBuilder(managingCourseQuestionsFor);
   };
   const deleteCourseQuestion = async (id) => {
-    if(window.confirm('حذف السؤال؟')) { await supabaseAdmin.from('registration_questions').delete().eq('id', id); loadCourseBuilder(managingCourseQuestionsFor); }
+    if(window.confirm('حذف السؤال؟')) { await supabase.from('registration_questions').delete().eq('id', id); loadCourseBuilder(managingCourseQuestionsFor); }
   };
 
   // --- UNIFIED SURVEY BUILDER ---
@@ -285,7 +285,7 @@ const Dashboard = () => {
   };
 
   const openEditSurveyBuilder = async (survey) => {
-    const { data: qData } = await supabaseAdmin.from('survey_questions').select('*, survey_question_options(*)').eq('survey_id', survey.id).order('sort_order');
+    const { data: qData } = await supabase.from('survey_questions').select('*, survey_question_options(*)').eq('survey_id', survey.id).order('sort_order');
     const formattedQuestions = (qData || []).map(q => ({
       id: q.id,
       question_text: q.question_text,
@@ -329,22 +329,22 @@ const Dashboard = () => {
       let finalSurveyId = unifiedSurvey.id;
 
       if (unifiedSurvey.id) {
-        const { error } = await supabaseAdmin.from('surveys').update(surveyPayload).eq('id', unifiedSurvey.id);
+        const { error } = await supabase.from('surveys').update(surveyPayload).eq('id', unifiedSurvey.id);
         if (error) throw error;
       } else {
-        const { data: insertedSurvey, error } = await supabaseAdmin.from('surveys').insert([surveyPayload]).select().single();
+        const { data: insertedSurvey, error } = await supabase.from('surveys').insert([surveyPayload]).select().single();
         if (error) throw error;
         finalSurveyId = insertedSurvey.id;
       }
 
       // Overwrite Questions
-      await supabaseAdmin.from('survey_questions').delete().eq('survey_id', finalSurveyId);
+      await supabase.from('survey_questions').delete().eq('survey_id', finalSurveyId);
 
       for (let i = 0; i < unifiedSurvey.questions.length; i++) {
         const q = unifiedSurvey.questions[i];
         if (!q.question_text) continue;
 
-        const { data: insertedQ, error: qErr } = await supabaseAdmin.from('survey_questions').insert([{
+        const { data: insertedQ, error: qErr } = await supabase.from('survey_questions').insert([{
           survey_id: finalSurveyId, question_text: q.question_text, question_type: q.question_type, is_required: q.is_required, sort_order: i
         }]).select().single();
         if (qErr) throw qErr;
@@ -352,7 +352,7 @@ const Dashboard = () => {
         if (q.question_type === 'single_choice' && q.optionsStr) {
           const opts = q.optionsStr.split(',').map(o => o.trim()).filter(o => o);
           if (opts.length > 0) {
-            await supabaseAdmin.from('survey_question_options').insert(opts.map((opt, idx) => ({ question_id: insertedQ.id, option_text: opt, sort_order: idx })));
+            await supabase.from('survey_question_options').insert(opts.map((opt, idx) => ({ question_id: insertedQ.id, option_text: opt, sort_order: idx })));
           }
         }
       }
@@ -365,7 +365,7 @@ const Dashboard = () => {
     }
   };
 
-  const deleteSurvey = async (id) => { if(window.confirm('حذف الاستبيان بالكامل؟')) { await supabaseAdmin.from('surveys').delete().eq('id', id); fetchData(); } };
+  const deleteSurvey = async (id) => { if(window.confirm('حذف الاستبيان بالكامل؟')) { await supabase.from('surveys').delete().eq('id', id); fetchData(); } };
 
   const copyLink = (id) => {
     const url = `${window.location.origin}/survey/${id}`;
@@ -378,16 +378,16 @@ const Dashboard = () => {
     setArchiveView({ type, item });
     try {
       if (type === 'course') {
-        const { data: regs } = await supabaseAdmin.from('registrations').select('*').eq('course_id', item.id).order('created_at', { ascending: false });
+        const { data: regs } = await supabase.from('registrations').select('*').eq('course_id', item.id).order('created_at', { ascending: false });
         setArchiveParticipants(regs || []);
-        const { data: ans } = await supabaseAdmin.from('registration_answers').select('*, registration_questions(question_text)');
+        const { data: ans } = await supabase.from('registration_answers').select('*, registration_questions(question_text)');
         const ansMap = {};
         (ans || []).forEach(a => { if (!ansMap[a.registration_id]) ansMap[a.registration_id] = []; ansMap[a.registration_id].push(a); });
         setArchiveAnswersMap(ansMap);
       } else {
-        const { data: subs } = await supabaseAdmin.from('survey_submissions').select('*').eq('survey_id', item.id).order('submitted_at', { ascending: false });
+        const { data: subs } = await supabase.from('survey_submissions').select('*').eq('survey_id', item.id).order('submitted_at', { ascending: false });
         setArchiveParticipants(subs || []);
-        const { data: ans } = await supabaseAdmin.from('survey_answers').select('*, survey_questions(question_text)');
+        const { data: ans } = await supabase.from('survey_answers').select('*, survey_questions(question_text)');
         const ansMap = {};
         (ans || []).forEach(a => { if (!ansMap[a.submission_id]) ansMap[a.submission_id] = []; ansMap[a.submission_id].push(a); });
         setArchiveAnswersMap(ansMap);
@@ -401,13 +401,13 @@ const Dashboard = () => {
   const deleteArchiveParticipant = async (id) => {
     if (window.confirm('حذف المشارك نهائياً؟')) {
       const table = archiveView.type === 'course' ? 'registrations' : 'survey_submissions';
-      await supabaseAdmin.from(table).delete().eq('id', id);
+      await supabase.from(table).delete().eq('id', id);
       loadArchiveDetails(archiveView.item, archiveView.type);
     }
   }
 
   // --- COMMENTS ---
-  const handleUpdateCommentStatus = async (id, status) => { await supabaseAdmin.from('comments').update({ status }).eq('id', id); fetchData(); };
+  const handleUpdateCommentStatus = async (id, status) => { await supabase.from('comments').update({ status }).eq('id', id); fetchData(); };
 
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
