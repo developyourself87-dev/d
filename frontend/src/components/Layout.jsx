@@ -35,7 +35,7 @@ const Layout = () => {
     async function fetchData() {
       const [{ data: settingsData }, { data: trainerData }] = await Promise.all([
         supabase.from('site_settings').select('*').single(),
-        supabase.from('trainer_profile').select('image_url').single()
+        supabase.from('trainer_profile').select('*').single()
       ]);
       if (settingsData) setSiteSettings(settingsData);
       if (trainerData) setTrainer(trainerData);
@@ -213,7 +213,7 @@ const Layout = () => {
                 <h3 className="text-2xl font-black gradient-text tracking-tight">{getTranslated(siteSettings, 'site_title') || 'دروب التمكين'}</h3>
               </div>
               <p className="text-sm text-text-subtle leading-relaxed mb-6 max-w-sm whitespace-pre-wrap">
-                {getTranslated(trainer, 'bio') || t('aboutTrainer')}
+                {getTranslated(trainer, 'bio')}
               </p>
               <div className="flex gap-4">
                 {siteSettings?.facebook_url && <a href={siteSettings.facebook_url} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-xl bg-dark-surface border border-dark-border flex items-center justify-center text-text-subtle hover:text-primary hover:border-primary/50 transition-all shadow-sm"><FacebookIcon size={18} /></a>}
