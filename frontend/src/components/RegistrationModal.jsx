@@ -68,7 +68,18 @@ const RegistrationModal = ({ course, onClose }) => {
       } catch(e) {}
 
       setSuccess(true);
-      setTimeout(() => { onClose(); }, 2500);
+      setTimeout(() => { 
+        if (course.redirect_url && course.redirect_url.trim() !== '') {
+          try {
+            new URL(course.redirect_url);
+            window.location.href = course.redirect_url;
+            return;
+          } catch (e) {
+            console.error("Invalid redirect URL", e);
+          }
+        }
+        onClose(); 
+      }, 2500);
     } catch (err) {
       setError(err.message);
     } finally {
