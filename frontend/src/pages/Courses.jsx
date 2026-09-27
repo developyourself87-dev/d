@@ -44,7 +44,7 @@ const Courses = () => {
           className="container mx-auto px-4 text-center relative z-10"
         >
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-text-main text-contrast-shadow mb-6 tracking-tight">{t('courses')}</h1>
-          <p className="text-text-main text-contrast-shadow text-sm md:text-lg max-w-2xl mx-auto font-bold">اكتشف مجموعة الدورات التدريبية المتاحة وسجل الآن للبدء في رحلتك نحو التميز.</p>
+          <p className="text-text-main text-contrast-shadow text-sm md:text-lg max-w-2xl mx-auto font-bold">{t('coursesSubtitle', 'اكتشف مجموعة الدورات التدريبية المتاحة وسجل الآن للبدء في رحلتك نحو التميز.')}</p>
         </motion.div>
       </section>
 

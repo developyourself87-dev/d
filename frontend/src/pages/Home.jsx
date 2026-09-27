@@ -225,7 +225,7 @@ const Home = () => {
         <div className="container mx-auto px-4 relative z-10">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: false }} variants={fadeUp} className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-black gradient-text mb-4">{t('works')}</h2>
-            <p className="text-text-subtle text-sm md:text-base uppercase tracking-widest">إنجازات ومشاريع بارزة</p>
+            <p className="text-text-subtle text-sm md:text-base uppercase tracking-widest">{t('notableWorks', 'إنجازات ومشاريع بارزة')}</p>
           </motion.div>
           
           <motion.div 
@@ -263,7 +263,7 @@ const Home = () => {
         <div className="container mx-auto px-4">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: false }} variants={fadeUp} className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-black gradient-text mb-4">{t('comments')}</h2>
-            <p className="text-text-subtle text-sm md:text-base uppercase tracking-widest">آراء المشاركين وتجاربهم</p>
+            <p className="text-text-subtle text-sm md:text-base uppercase tracking-widest">{t('participantReviews', 'آراء المشاركين وتجاربهم')}</p>
           </motion.div>
 
           <motion.div 
@@ -291,7 +291,7 @@ const Home = () => {
           {/* Add Comment Form */}
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: false }} variants={fadeUp} className="max-w-2xl mx-auto glass-card p-8 md:p-10 rounded-3xl glow-border relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-secondary"></div>
-            <h3 className="text-2xl font-bold mb-8 text-center text-text-main">أضف رأيك</h3>
+            <h3 className="text-2xl font-bold mb-8 text-center text-text-main">{t('addReview', 'أضف رأيك')}</h3>
             {commentStatus === 'success' ? (
               <div className="bg-primary/10 text-primary p-6 rounded-2xl text-center border border-primary/20 font-bold">شكراً لك! تم إرسال تعليقك وسيظهر بعد المراجعة.</div>
             ) : (
@@ -311,7 +311,7 @@ const Home = () => {
                 <textarea placeholder={t('write_comment', 'ما هو رأيك...')} required value={commentData.comment} onChange={e => setCommentData({...commentData, comment: e.target.value})} className="w-full neon-input p-4 rounded-xl h-32 text-sm resize-none"></textarea>
                 <button type="submit" disabled={commentStatus === 'loading'} className="w-full neon-btn py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
                   {commentStatus === 'loading' ? t('loading') : (
-                    <>{t('submit')} <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg></>
+                    <>{t('addReview', 'أضف رأيك')} <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg></>
                   )}
                 </button>
               </form>
@@ -325,7 +325,7 @@ const Home = () => {
         <div className="container mx-auto px-4 max-w-4xl">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: false }} variants={fadeUp} className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-black gradient-text mb-4">{t('contact')}</h2>
-            <p className="text-text-subtle text-sm md:text-base uppercase tracking-widest">تواصل معنا مباشرة</p>
+            <p className="text-text-subtle text-sm md:text-base uppercase tracking-widest">{t('contactDirectly', 'تواصل معنا مباشرة')}</p>
           </motion.div>
           
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: false }} variants={fadeUp}>
@@ -348,7 +348,7 @@ const Home = () => {
                   <textarea required value={contactData.message} onChange={e => setContactData({...contactData, message: e.target.value})} className="w-full neon-input p-4 rounded-xl h-40 text-sm resize-none"></textarea>
                 </div>
                 <button type="submit" disabled={contactStatus === 'loading'} className="w-full md:w-auto md:px-12 neon-btn py-4 rounded-xl text-sm font-bold mx-auto block mt-8">
-                  {contactStatus === 'loading' ? t('loading') : t('sendMessage', t('sendMessage', 'إرسال الرسالة'))}
+                  {contactStatus === 'loading' ? t('loading') : t('sendMessage', 'إرسال الرسالة')}
                 </button>
               </form>
             )}
