@@ -161,7 +161,7 @@ const Home = () => {
 
           <motion.h1 
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.8 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-black text-text-main  mb-4 text-center tracking-tight"
+            className="text-4xl md:text-6xl lg:text-7xl font-black text-text-main text-neon-glow mb-4 text-center tracking-tight"
           >
             {getTranslated(trainer, 'name') || t('trainer_name_default', 'اسم المدربة')}
           </motion.h1>
