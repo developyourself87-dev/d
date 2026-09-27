@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabase';
-import { supabase } from '../../services/supabase';
 
 const Dashboard = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
