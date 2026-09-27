@@ -159,7 +159,7 @@ const Home = () => {
             )}
           </motion.div>
 
-          <CurvedText text={getTranslated(trainer, 'name') || 'اسم المدربة'} className="text-4xl md:text-6xl lg:text-7xl font-black text-text-main drop-shadow-lg" />
+          <CurvedText text={getTranslated(trainer, 'name') || 'اسم المدربة'} className="text-4xl md:text-6xl lg:text-7xl font-black text-text-main text-contrast-shadow" />
           
           <motion.h2 
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8, duration: 0.8 }}

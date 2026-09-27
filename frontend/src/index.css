@@ -32,6 +32,8 @@
   
   --grid-color: rgba(0, 242, 254, 0.1);
   --grid-size: 40px;
+  
+  --text-shadow-color: rgba(0, 0, 0, 0.8); /* Dark shadow for dark mode */
 }
 
 .light-mode {
@@ -65,6 +67,8 @@
   
   --grid-color: rgba(15, 23, 42, 0.15);
   --grid-size: 40px;
+  
+  --text-shadow-color: rgba(255, 255, 255, 1); /* White shadow for light mode */
 }
 
 @theme {
@@ -126,6 +130,10 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.text-contrast-shadow {
+  text-shadow: 0px 4px 15px var(--text-shadow-color), 0px 0px 10px var(--text-shadow-color), 0px 0px 5px var(--text-shadow-color);
 }
 
 .glass-nav {
