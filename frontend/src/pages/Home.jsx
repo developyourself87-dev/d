@@ -297,7 +297,7 @@ const Home = () => {
             ) : (
               <form onSubmit={handleCommentSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <input type="text" placeholder={t('full_name', 'الاسم الكامل')} required value={commentData.name} onChange={e => setCommentData({...commentData, name: e.target.value})} className="w-full neon-input p-4 rounded-xl text-sm" />
+                  <input type="text" placeholder={t('fullName', 'الاسم الكامل')} required value={commentData.name} onChange={e => setCommentData({...commentData, name: e.target.value})} className="w-full neon-input p-4 rounded-xl text-sm" />
                   <input type="email" placeholder={t('email', 'البريد الإلكتروني')} required value={commentData.email} onChange={e => setCommentData({...commentData, email: e.target.value})} className="w-full neon-input p-4 rounded-xl text-sm" dir="ltr" />
                 </div>
                 <div className="glass-card p-4 rounded-xl border border-dark-border flex items-center gap-4">
@@ -339,7 +339,7 @@ const Home = () => {
                     <input type="text" required value={contactData.name} onChange={e => setContactData({...contactData, name: e.target.value})} className="w-full neon-input p-4 rounded-xl text-sm" />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-text-muted mb-2 uppercase tracking-widest">البريد الإلكتروني</label>
+                    <label className="block text-xs font-bold text-text-muted mb-2 uppercase tracking-widest">{t('email', 'البريد الإلكتروني')}</label>
                     <input type="email" required value={contactData.email} onChange={e => setContactData({...contactData, email: e.target.value})} className="w-full neon-input p-4 rounded-xl text-sm" dir="ltr" />
                   </div>
                 </div>
@@ -348,7 +348,7 @@ const Home = () => {
                   <textarea required value={contactData.message} onChange={e => setContactData({...contactData, message: e.target.value})} className="w-full neon-input p-4 rounded-xl h-40 text-sm resize-none"></textarea>
                 </div>
                 <button type="submit" disabled={contactStatus === 'loading'} className="w-full md:w-auto md:px-12 neon-btn py-4 rounded-xl text-sm font-bold mx-auto block mt-8">
-                  {contactStatus === 'loading' ? t('loading') : t('send_message', 'إرسال الرسالة')}
+                  {contactStatus === 'loading' ? t('loading') : t('sendMessage', t('sendMessage', 'إرسال الرسالة'))}
                 </button>
               </form>
             )}

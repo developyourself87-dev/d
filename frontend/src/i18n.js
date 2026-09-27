@@ -7,10 +7,10 @@ const resources = {
     translation: {
       home: "الرئيسية",
       courses: "الدورات",
-      contact: "اتصل بنا",
-      aboutTrainer: "عن المدربة",
+      contact: "تواصل معنا",
+      aboutTrainer: "نبذة شخصية",
       works: "الإنجازات",
-      comments: "آراء المشاركين",
+      comments: "آراء المتدربين",
       register: "سجل الآن",
       privacyConsent: "أوافق على سياسة الخصوصية",
       submit: "إرسال",
@@ -18,7 +18,21 @@ const resources = {
       errorMsg: "حدث خطأ، يرجى المحاولة لاحقاً.",
       loading: "جاري التحميل...",
       adminDashboard: "لوحة التحكم",
-      language: "اللغة"
+      language: "اللغة",
+      experience: "الخبرات",
+      qualifications: "المؤهلات",
+      notableWorks: "إنجازات ومشاريع بارزة",
+      participantReviews: "آراء المشاركين وتجاربهم",
+      addReview: "أضف رأيك",
+      fullName: "الاسم الكامل",
+      email: "البريد الإلكتروني",
+      rating: "التقييم:",
+      contactDirectly: "تواصل معنا مباشرة",
+      name: "الاسم",
+      message: "الرسالة",
+      sendMessage: "إرسال الرسالة",
+      coursesSubtitle: "اكتشف مجموعة الدورات التدريبية المتاحة وسجل الآن للبدء في رحلتك نحو التميز.",
+      sitemap: "خريطة الموقع"
     }
   },
   en: {
@@ -26,7 +40,7 @@ const resources = {
       home: "Home",
       courses: "Courses",
       contact: "Contact Us",
-      aboutTrainer: "About Trainer",
+      aboutTrainer: "Personal Bio",
       works: "Achievements",
       comments: "Testimonials",
       register: "Register Now",
@@ -36,7 +50,21 @@ const resources = {
       errorMsg: "An error occurred, please try again.",
       loading: "Loading...",
       adminDashboard: "Dashboard",
-      language: "Language"
+      language: "Language",
+      experience: "Experience",
+      qualifications: "Qualifications",
+      notableWorks: "Notable achievements & projects",
+      participantReviews: "Participants' reviews and experiences",
+      addReview: "Add your review",
+      fullName: "Full Name",
+      email: "Email",
+      rating: "Rating:",
+      contactDirectly: "Contact us directly",
+      name: "Name",
+      message: "Message",
+      sendMessage: "Send Message",
+      coursesSubtitle: "Discover the available training courses and register now to start your journey towards excellence.",
+      sitemap: "Sitemap"
     }
   },
   fr: {
@@ -44,7 +72,7 @@ const resources = {
       home: "Accueil",
       courses: "Cours",
       contact: "Contactez-nous",
-      aboutTrainer: "À propos du Formateur",
+      aboutTrainer: "Biographie",
       works: "Réalisations",
       comments: "Témoignages",
       register: "S'inscrire",
@@ -54,7 +82,21 @@ const resources = {
       errorMsg: "Une erreur s'est produite, veuillez réessayer.",
       loading: "Chargement...",
       adminDashboard: "Tableau de bord",
-      language: "Langue"
+      language: "Langue",
+      experience: "Expériences",
+      qualifications: "Qualifications",
+      notableWorks: "Réalisations et projets notables",
+      participantReviews: "Avis et expériences des participants",
+      addReview: "Ajoutez votre avis",
+      fullName: "Nom complet",
+      email: "E-mail",
+      rating: "Évaluation :",
+      contactDirectly: "Contactez-nous directement",
+      name: "Nom",
+      message: "Message",
+      sendMessage: "Envoyer le message",
+      coursesSubtitle: "Découvrez les formations disponibles et inscrivez-vous dès maintenant pour commencer votre parcours vers l'excellence.",
+      sitemap: "Plan du site"
     }
   }
 };
