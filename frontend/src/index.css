@@ -33,7 +33,7 @@
   --grid-color: rgba(0, 242, 254, 0.1);
   --grid-size: 40px;
   
-  --text-shadow-color: rgba(0, 0, 0, 0.8); /* Dark shadow for dark mode */
+  --text-shadow-color: var(--grad-1); /* Blue shadow for dark mode */
 }
 
 .light-mode {
@@ -68,7 +68,7 @@
   --grid-color: rgba(15, 23, 42, 0.15);
   --grid-size: 40px;
   
-  --text-shadow-color: rgba(255, 255, 255, 1); /* White shadow for light mode */
+  --text-shadow-color: var(--grad-1); /* Blue shadow for light mode */
 }
 
 @theme {
