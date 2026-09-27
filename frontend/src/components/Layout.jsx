@@ -5,6 +5,7 @@ import { supabase } from '../services/supabase';
 
 // Use basic react-icons
 import { FiMenu as MenuIcon, FiX as XIcon, FiSun as SunIcon, FiMoon as MoonIcon, FiFacebook as FacebookIcon, FiYoutube as YoutubeIcon, FiMail as MailIcon, FiPhone as PhoneIcon } from 'react-icons/fi';
+import { FaInstagram, FaTelegramPlane, FaWhatsapp } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Layout = () => {
@@ -195,29 +196,36 @@ const Layout = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
             <div>
               <div className="flex items-center gap-3 mb-6">
-                <svg className="w-8 h-8 drop-shadow-[0_0_8px_rgba(0,242,254,0.5)]" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M50 15 L85 35 L85 75 L50 95 L15 75 L15 35 Z" stroke="url(#gradLogoFooter)" strokeWidth="6" fill="var(--glass-bg)"/>
-                  {!isLightMode && <circle cx="50" cy="50" r="3.5" fill="url(#gradLogoFooter)" />}
-                  <defs>
-                    <linearGradient id="gradLogoFooter" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="var(--grad-1)" />
-                      <stop offset="100%" stopColor="var(--grad-2)" />
-                    </linearGradient>
-                  </defs>
-                </svg>
+                {trainer?.image_url ? (
+                  <img src={trainer.image_url} alt="Logo" className="w-10 h-10 md:w-12 md:h-12 object-cover drop-shadow-[0_0_8px_rgba(0,242,254,0.5)]" style={{ clipPath: siteSettings?.profile_shape === 'hexagon' ? 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' : siteSettings?.profile_shape === 'square' ? 'inset(0)' : 'circle(50% at 50% 50%)' }} />
+                ) : (
+                  <svg className="w-8 h-8 drop-shadow-[0_0_8px_rgba(0,242,254,0.5)]" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 15 L85 35 L85 75 L50 95 L15 75 L15 35 Z" stroke="url(#gradLogoFooter)" strokeWidth="6" fill="var(--glass-bg)"/>
+                    {!isLightMode && <circle cx="50" cy="50" r="3.5" fill="url(#gradLogoFooter)" />}
+                    <defs>
+                      <linearGradient id="gradLogoFooter" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="var(--grad-1)" />
+                        <stop offset="100%" stopColor="var(--grad-2)" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                )}
                 <h3 className="text-2xl font-black gradient-text tracking-tight">{getTranslated(siteSettings, 'site_title') || 'دروب التمكين'}</h3>
               </div>
-              <p className="text-sm text-text-subtle leading-relaxed mb-6 max-w-sm">
-                منصة رقمية متطورة للتدريب والتطوير وتنمية المهارات الشخصية والمهنية بأحدث المعايير العالمية.
+              <p className="text-sm text-text-subtle leading-relaxed mb-6 max-w-sm whitespace-pre-wrap">
+                {getTranslated(siteSettings, 'footer_text') || 'منصة رقمية متطورة للتدريب والتطوير وتنمية المهارات الشخصية والمهنية بأحدث المعايير العالمية.'}
               </p>
               <div className="flex gap-4">
                 {siteSettings?.facebook_url && <a href={siteSettings.facebook_url} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-xl bg-dark-surface border border-dark-border flex items-center justify-center text-text-subtle hover:text-primary hover:border-primary/50 transition-all shadow-sm"><FacebookIcon size={18} /></a>}
+                {siteSettings?.instagram_url && <a href={siteSettings.instagram_url} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-xl bg-dark-surface border border-dark-border flex items-center justify-center text-text-subtle hover:text-[#E1306C] hover:border-[#E1306C]/50 transition-all shadow-sm"><FaInstagram size={18} /></a>}
+                {siteSettings?.telegram_url && <a href={siteSettings.telegram_url} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-xl bg-dark-surface border border-dark-border flex items-center justify-center text-text-subtle hover:text-[#0088cc] hover:border-[#0088cc]/50 transition-all shadow-sm"><FaTelegramPlane size={18} /></a>}
+                {siteSettings?.whatsapp && <a href={`https://wa.me/${String(siteSettings.whatsapp).replace(/\D/g,'')}`} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-xl bg-dark-surface border border-dark-border flex items-center justify-center text-text-subtle hover:text-[#25D366] hover:border-[#25D366]/50 transition-all shadow-sm"><FaWhatsapp size={18} /></a>}
                 {siteSettings?.youtube_url && <a href={siteSettings.youtube_url} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-xl bg-dark-surface border border-dark-border flex items-center justify-center text-text-subtle hover:text-red-500 hover:border-red-500/50 transition-all shadow-sm"><YoutubeIcon size={18} /></a>}
               </div>
             </div>
             
             <div className="md:pl-12">
-              <h3 className="text-sm font-bold text-text-main mb-6 uppercase tracking-widest">خريطة الموقع</h3>
+              <h3 className="text-sm font-bold text-text-main mb-6 uppercase tracking-widest">{t('sitemap', 'خريطة الموقع')}</h3>
               <ul className="space-y-4 text-sm font-medium">
                 <li><Link to="/" className="text-text-muted hover:text-primary transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary/50"></span> {t('home')}</Link></li>
                 <li><Link to="/courses" className="text-text-muted hover:text-primary transition-colors flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary/50"></span> {t('courses')}</Link></li>
@@ -225,7 +233,7 @@ const Layout = () => {
             </div>
             
             <div>
-              <h3 className="text-sm font-bold text-text-main mb-6 uppercase tracking-widest">تواصل معنا</h3>
+              <h3 className="text-sm font-bold text-text-main mb-6 uppercase tracking-widest">{t('contact', 'تواصل معنا')}</h3>
               <ul className="space-y-5 text-sm font-medium" dir="ltr">
                 {siteSettings?.email && (
                   <li className="flex items-center gap-4 justify-end group">
@@ -243,12 +251,9 @@ const Layout = () => {
             </div>
           </div>
           
-          <div className="pt-8 border-t border-dark-border flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="pt-8 border-t border-dark-border flex justify-center items-center gap-4">
             <div className="text-xs font-bold text-text-subtle tracking-widest">
-              &copy; {new Date().getFullYear()} {getTranslated(siteSettings, 'site_title') || 'دروب التمكين'}. جميع الحقوق محفوظة.
-            </div>
-            <div className="text-xs text-text-subtle flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> النظام يعمل بكفاءة
+              &copy; {new Date().getFullYear()} laissaoui_dev_dz
             </div>
           </div>
         </div>

@@ -28,7 +28,7 @@ const RegistrationModal = ({ course, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.privacyConsent) {
-      setError("يجب الموافقة على سياسة الخصوصية");
+      setError(t('error_privacy', 'يجب الموافقة على سياسة الخصوصية'));
       return;
     }
     setLoading(true);
@@ -108,8 +108,8 @@ const RegistrationModal = ({ course, onClose }) => {
         >
           <motion.div variants={modalVariants} className="glass-card rounded-3xl p-10 max-w-md w-full text-center glow-border shadow-2xl">
             <div className="text-7xl text-primary mb-6 drop-shadow-[0_0_15px_rgba(0,242,254,0.5)]">✓</div>
-            <h2 className="text-3xl font-black text-text-main mb-4">تم التسجيل بنجاح!</h2>
-            <p className="text-text-muted mb-6 leading-relaxed">شكراً لتسجيلك في دورة <br/><span className="text-primary font-bold">"{course.title}"</span><br/> تم حفظ بياناتك بنجاح.</p>
+            <h2 className="text-3xl font-black text-text-main mb-4">{t('reg_success_title', 'تم التسجيل بنجاح!')}</h2>
+            <p className="text-text-muted mb-6 leading-relaxed">{t('thanks_reg', 'شكراً لتسجيلك في دورة ')} <br/><span className="text-primary font-bold">"{course.title}"</span><br/> تم حفظ بياناتك بنجاح.</p>
           </motion.div>
         </motion.div>
       ) : (
@@ -123,7 +123,7 @@ const RegistrationModal = ({ course, onClose }) => {
             <button onClick={onClose} className="absolute top-5 left-5 text-text-subtle hover:text-primary text-3xl font-bold transition-transform hover:scale-110 hover:rotate-90 z-20">&times;</button>
             
             <div className="p-6 md:p-8 flex-shrink-0 border-b border-dark-border bg-dark-surface/50 z-10">
-              <h2 className="text-xl md:text-2xl font-black text-text-main mb-2">التسجيل في: <br className="md:hidden"/><span className="gradient-text">{course.title}</span></h2>
+              <h2 className="text-xl md:text-2xl font-black text-text-main mb-2">{t('reg_in', 'التسجيل في:')} <br className="md:hidden"/><span className="gradient-text">{course.title}</span></h2>
               <p className="text-text-muted text-xs md:text-sm">الرجاء إدخال بياناتك بدقة لإتمام عملية التسجيل.</p>
             </div>
             
@@ -133,15 +133,15 @@ const RegistrationModal = ({ course, onClose }) => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 glass-card p-5 rounded-2xl border border-dark-border shadow-inner">
                   <div className="col-span-full">
-                    <label className="block text-xs font-bold text-text-muted mb-2 uppercase tracking-widest">الاسم الكامل <span className="text-primary">*</span></label>
+                    <label className="block text-xs font-bold text-text-muted mb-2 uppercase tracking-widest">{t('full_name', 'الاسم الكامل')} <span className="text-primary">*</span></label>
                     <input type="text" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full neon-input p-3 rounded-xl text-sm" />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-text-muted mb-2 uppercase tracking-widest">رقم الهاتف <span className="text-primary">*</span></label>
+                    <label className="block text-xs font-bold text-text-muted mb-2 uppercase tracking-widest">{t('phone', 'رقم الهاتف')} <span className="text-primary">*</span></label>
                     <input type="tel" required value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full neon-input p-3 rounded-xl text-sm" dir="ltr" placeholder="+966 5X XXX XXXX" />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-text-muted mb-2 uppercase tracking-widest">البريد الإلكتروني <span className="text-primary">*</span></label>
+                    <label className="block text-xs font-bold text-text-muted mb-2 uppercase tracking-widest">{t('email', 'البريد الإلكتروني')} <span className="text-primary">*</span></label>
                     <input type="email" required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full neon-input p-3 rounded-xl text-sm" dir="ltr" />
                   </div>
                 </div>
@@ -149,7 +149,7 @@ const RegistrationModal = ({ course, onClose }) => {
                 {/* Dynamic Questions */}
                 {questions.length > 0 && (
                    <div className="space-y-5 bg-dark-surface/30 p-5 rounded-2xl border border-dark-border">
-                     <h3 className="font-bold text-sm gradient-text border-b border-dark-border pb-3 uppercase tracking-widest">أسئلة إضافية</h3>
+                     <h3 className="font-bold text-sm gradient-text border-b border-dark-border pb-3 uppercase tracking-widest">{t('extra_questions', 'أسئلة إضافية')}</h3>
                      {questions.map(q => (
                        <div key={q.id}>
                          <label className="block text-xs font-bold text-text-main mb-2">
@@ -162,7 +162,7 @@ const RegistrationModal = ({ course, onClose }) => {
                          
                          {q.question_type === 'single_choice' && (
                            <select required={q.is_required} onChange={e => setAnswers({...answers, [q.id]: e.target.value})} className="w-full neon-input p-3 rounded-xl text-sm appearance-none bg-no-repeat bg-right" style={{backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2300F2FE'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, backgroundPosition: 'left 1rem center', backgroundSize: '1.2em 1.2em', paddingLeft: '2.5rem'}}>
-                             <option value="">اختر إجابة...</option>
+                             <option value="">{t('choose_answer', 'اختر إجابة...')}</option>
                              {q.question_options?.sort((a,b)=>a.sort_order - b.sort_order).map(opt => (
                                <option key={opt.id} value={opt.option_text}>{opt.option_text}</option>
                              ))}
@@ -184,7 +184,7 @@ const RegistrationModal = ({ course, onClose }) => {
                 </div>
 
                 <div className="flex flex-col-reverse md:flex-row justify-end gap-3 pt-4">
-                  <button type="button" onClick={onClose} className="px-6 py-3 border border-dark-border rounded-xl text-text-muted hover:text-text-main hover:border-text-subtle transition-all text-sm font-bold tracking-widest uppercase">إلغاء</button>
+                  <button type="button" onClick={onClose} className="px-6 py-3 border border-dark-border rounded-xl text-text-muted hover:text-text-main hover:border-text-subtle transition-all text-sm font-bold tracking-widest uppercase">{t('cancel', 'إلغاء')}</button>
                   <button type="submit" disabled={loading} className="px-10 py-3 neon-btn rounded-xl disabled:opacity-50 text-sm font-bold tracking-widest uppercase shadow-lg">
                     {loading ? t('loading') : t('submit')}
                   </button>

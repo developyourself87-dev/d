@@ -33,7 +33,7 @@ const Courses = () => {
   return (
     <div className="min-h-screen overflow-hidden">
       {/* Video Header */}
-      <section className="video-overlay h-[60vh] md:h-[70vh] flex items-center relative overflow-hidden">
+      <section className="video-overlay h-[40vh] md:h-[50vh] flex items-center relative overflow-hidden">
         <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover opacity-70">
           <source src="https://cdn.pixabay.com/video/2021/02/17/64898-514209942_large.mp4" type="video/mp4" />
         </video>
@@ -49,7 +49,7 @@ const Courses = () => {
       </section>
 
       {/* Courses Grid */}
-      <section className="neon-grid py-20 md:py-32">
+      <section className="neon-grid py-12 md:py-16">
         <div className="container mx-auto px-4 relative z-10">
           
           <motion.div 
@@ -69,8 +69,8 @@ const Courses = () => {
                   <p className="text-text-muted text-sm mb-6 line-clamp-3 leading-relaxed">{course.description}</p>
                   
                   <div className="mt-auto space-y-3 text-sm text-text-main bg-dark-surface/50 p-4 rounded-2xl border border-dark-border mb-6">
-                    {course.duration && <p className="flex justify-between items-center"><span className="text-primary font-bold">المدة:</span> <span className="font-medium text-text-muted">{course.duration}</span></p>}
-                    {course.course_date && <p className="flex justify-between items-center"><span className="text-primary font-bold">التاريخ:</span> <span className="font-medium text-text-muted">{new Date(course.course_date).toLocaleDateString()}</span></p>}
+                    {course.duration && <p className="flex justify-between items-center"><span className="text-primary font-bold">{t('duration')}</span> <span className="font-medium text-text-muted">{course.duration}</span></p>}
+                    {course.course_date && <p className="flex justify-between items-center"><span className="text-primary font-bold">{t('date')}</span> <span className="font-medium text-text-muted">{new Date(course.course_date).toLocaleDateString()}</span></p>}
                   </div>
                   
                   <button 
@@ -83,7 +83,7 @@ const Courses = () => {
               </motion.div>
             ))}
             {courses.length === 0 && (
-              <div className="col-span-full text-center text-text-subtle py-10">لا توجد دورات متاحة حالياً.</div>
+              <div className="col-span-full text-center text-text-subtle py-10">{t('no_courses')}</div>
             )}
           </motion.div>
         </div>

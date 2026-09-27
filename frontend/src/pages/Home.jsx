@@ -112,8 +112,8 @@ const Home = () => {
       
       await supabase.from('notifications').insert([{
         type: 'new_comment',
-        title: 'تعليق جديد',
-        message: `تعليق جديد من ${commentData.name}`
+        title: t('new_comment_notification', 'تعليق جديد'),
+        message: `${t('new_comment_notification', 'تعليق جديد')} ${t('from', 'من')} ${commentData.name}`
       }]).catch(() => {});
 
       setCommentStatus('success');
@@ -155,11 +155,16 @@ const Home = () => {
                 <img src={trainer.image_url} alt={trainer?.name} className="relative rounded-full w-40 h-40 md:w-56 md:h-56 object-cover border-4 border-dark-border shadow-2xl" />
               </div>
             ) : (
-              <div className="rounded-full w-40 h-40 md:w-56 md:h-56 bg-dark-surface flex items-center justify-center text-text-subtle border-4 border-dark-border shadow-2xl relative z-10">صورة</div>
+              <div className="rounded-full w-40 h-40 md:w-56 md:h-56 bg-dark-surface flex items-center justify-center text-text-subtle border-4 border-dark-border shadow-2xl relative z-10">{t('image', 'صورة')}</div>
             )}
           </motion.div>
 
-          <CurvedText text={getTranslated(trainer, 'name') || 'اسم المدربة'} className="text-4xl md:text-6xl lg:text-7xl font-black text-text-main text-contrast-shadow" />
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.8 }}
+            className="text-4xl md:text-6xl lg:text-7xl font-black text-text-main text-contrast-shadow mb-4 text-center tracking-tight"
+          >
+            {getTranslated(trainer, 'name') || t('trainer_name_default', 'اسم المدربة')}
+          </motion.h1>
           
           <motion.h2 
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8, duration: 0.8 }}
@@ -184,26 +189,32 @@ const Home = () => {
               </p>
             </motion.div>
 
-            <motion.div 
-              initial={{ opacity: 0, x: -50, rotate: -5 }} 
-              whileInView={{ opacity: 1, x: 0, rotate: 3 }} 
-              viewport={{ once: false, margin: "-100px" }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="md:w-1/2 flex flex-col gap-6"
-            >
+            <div className="md:w-1/2 flex flex-col gap-6">
               {getTranslated(trainer, 'experience') && (
-                <div className="glass-card p-6 rounded-3xl glow-border shadow-lg">
-                  <h3 className="text-sm font-bold text-secondary mb-2 uppercase tracking-widest">الخبرات</h3>
+                <motion.div 
+                  initial={{ opacity: 0, x: -50, rotate: -5 }} 
+                  whileInView={{ opacity: 1, x: 0, rotate: 3 }} 
+                  viewport={{ once: false, margin: "-100px" }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  className="glass-card p-6 rounded-3xl glow-border shadow-lg"
+                >
+                  <h3 className="text-sm font-bold text-secondary mb-2 uppercase tracking-widest">{t('experience', 'الخبرات')}</h3>
                   <p className="whitespace-pre-wrap text-text-muted text-sm leading-relaxed">{getTranslated(trainer, 'experience')}</p>
-                </div>
+                </motion.div>
               )}
               {getTranslated(trainer, 'qualifications') && (
-                <div className="glass-card p-6 rounded-3xl glow-border shadow-lg ml-0 md:-ml-12">
-                  <h3 className="text-sm font-bold text-secondary mb-2 uppercase tracking-widest">المؤهلات</h3>
+                <motion.div 
+                  initial={{ opacity: 0, x: -50, rotate: -3 }} 
+                  whileInView={{ opacity: 1, x: 0, rotate: 1 }} 
+                  viewport={{ once: false, margin: "-100px" }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  className="glass-card p-6 rounded-3xl glow-border shadow-lg ml-0 md:-ml-12"
+                >
+                  <h3 className="text-sm font-bold text-secondary mb-2 uppercase tracking-widest">{t('qualifications', 'المؤهلات')}</h3>
                   <p className="whitespace-pre-wrap text-text-muted text-sm leading-relaxed">{getTranslated(trainer, 'qualifications')}</p>
-                </div>
+                </motion.div>
               )}
-            </motion.div>
+            </div>
             
           </div>
         </div>
@@ -241,7 +252,7 @@ const Home = () => {
               </motion.div>
             ))}
             {works.length === 0 && (
-              <div className="col-span-full text-center text-text-subtle py-10">لا توجد إنجازات مضافة حالياً.</div>
+              <div className="col-span-full text-center text-text-subtle py-10">{t('no_works', 'لا توجد إنجازات مضافة حالياً.')}</div>
             )}
           </motion.div>
         </div>
@@ -286,18 +297,18 @@ const Home = () => {
             ) : (
               <form onSubmit={handleCommentSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <input type="text" placeholder="الاسم الكامل" required value={commentData.name} onChange={e => setCommentData({...commentData, name: e.target.value})} className="w-full neon-input p-4 rounded-xl text-sm" />
-                  <input type="email" placeholder="البريد الإلكتروني" required value={commentData.email} onChange={e => setCommentData({...commentData, email: e.target.value})} className="w-full neon-input p-4 rounded-xl text-sm" dir="ltr" />
+                  <input type="text" placeholder={t('full_name', 'الاسم الكامل')} required value={commentData.name} onChange={e => setCommentData({...commentData, name: e.target.value})} className="w-full neon-input p-4 rounded-xl text-sm" />
+                  <input type="email" placeholder={t('email', 'البريد الإلكتروني')} required value={commentData.email} onChange={e => setCommentData({...commentData, email: e.target.value})} className="w-full neon-input p-4 rounded-xl text-sm" dir="ltr" />
                 </div>
                 <div className="glass-card p-4 rounded-xl border border-dark-border flex items-center gap-4">
-                  <label className="text-sm font-bold text-text-muted">التقييم:</label>
+                  <label className="text-sm font-bold text-text-muted">{t('rating', 'التقييم:')}</label>
                   <div className="flex gap-2">
                     {[1,2,3,4,5].map(star => (
                       <button type="button" key={star} onClick={() => setCommentData({...commentData, rating: star})} className={`text-3xl transition-transform hover:scale-110 ${commentData.rating >= star ? 'text-primary drop-shadow-[0_0_8px_rgba(0,242,254,0.5)]' : 'text-text-subtle opacity-40'}`}>★</button>
                     ))}
                   </div>
                 </div>
-                <textarea placeholder="ما هو رأيك..." required value={commentData.comment} onChange={e => setCommentData({...commentData, comment: e.target.value})} className="w-full neon-input p-4 rounded-xl h-32 text-sm resize-none"></textarea>
+                <textarea placeholder={t('write_comment', 'ما هو رأيك...')} required value={commentData.comment} onChange={e => setCommentData({...commentData, comment: e.target.value})} className="w-full neon-input p-4 rounded-xl h-32 text-sm resize-none"></textarea>
                 <button type="submit" disabled={commentStatus === 'loading'} className="w-full neon-btn py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
                   {commentStatus === 'loading' ? t('loading') : (
                     <>{t('submit')} <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg></>
@@ -324,7 +335,7 @@ const Home = () => {
               <form onSubmit={handleContactSubmit} className="space-y-6 glass-card p-8 md:p-12 rounded-3xl glow-border">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-xs font-bold text-text-muted mb-2 uppercase tracking-widest">الاسم</label>
+                    <label className="block text-xs font-bold text-text-muted mb-2 uppercase tracking-widest">{t('name', 'الاسم')}</label>
                     <input type="text" required value={contactData.name} onChange={e => setContactData({...contactData, name: e.target.value})} className="w-full neon-input p-4 rounded-xl text-sm" />
                   </div>
                   <div>
@@ -333,11 +344,11 @@ const Home = () => {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-text-muted mb-2 uppercase tracking-widest">الرسالة</label>
+                  <label className="block text-xs font-bold text-text-muted mb-2 uppercase tracking-widest">{t('message', 'الرسالة')}</label>
                   <textarea required value={contactData.message} onChange={e => setContactData({...contactData, message: e.target.value})} className="w-full neon-input p-4 rounded-xl h-40 text-sm resize-none"></textarea>
                 </div>
                 <button type="submit" disabled={contactStatus === 'loading'} className="w-full md:w-auto md:px-12 neon-btn py-4 rounded-xl text-sm font-bold mx-auto block mt-8">
-                  {contactStatus === 'loading' ? t('loading') : 'إرسال الرسالة'}
+                  {contactStatus === 'loading' ? t('loading') : t('send_message', 'إرسال الرسالة')}
                 </button>
               </form>
             )}

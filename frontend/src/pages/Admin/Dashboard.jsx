@@ -558,6 +558,13 @@ const Dashboard = () => {
                 <div><label className="block text-sm mb-1 font-bold">رقم الهاتف</label><input type="text" value={siteSettings?.phone || ''} onChange={e=>setSiteSettings({...siteSettings, phone:e.target.value})} className="w-full border p-3 rounded bg-slate-50" dir="ltr" disabled={editingLang !== 'ar'} /></div>
                 <div><label className="block text-sm mb-1 font-bold">البريد الإلكتروني</label><input type="email" value={siteSettings?.email || ''} onChange={e=>setSiteSettings({...siteSettings, email:e.target.value})} className="w-full border p-3 rounded bg-slate-50" dir="ltr" disabled={editingLang !== 'ar'} /></div>
                 <div><label className="block text-sm mb-1 font-bold">رابط فيسبوك</label><input type="text" value={siteSettings?.facebook_url || ''} onChange={e=>setSiteSettings({...siteSettings, facebook_url:e.target.value})} className="w-full border p-3 rounded bg-slate-50" dir="ltr" disabled={editingLang !== 'ar'} /></div>
+                <div><label className="block text-sm mb-1 font-bold">رابط انستقرام</label><input type="text" value={siteSettings?.instagram_url || ''} onChange={e=>setSiteSettings({...siteSettings, instagram_url:e.target.value})} className="w-full border p-3 rounded bg-slate-50" dir="ltr" disabled={editingLang !== 'ar'} /></div>
+                <div><label className="block text-sm mb-1 font-bold">رابط تيليجرام</label><input type="text" value={siteSettings?.telegram_url || ''} onChange={e=>setSiteSettings({...siteSettings, telegram_url:e.target.value})} className="w-full border p-3 rounded bg-slate-50" dir="ltr" disabled={editingLang !== 'ar'} /></div>
+                <div className="col-span-full"><label className="block text-sm mb-1 font-bold">نص التذييل (الفوتر)</label><textarea value={siteSettings?.translations?.[editingLang]?.footer_text || (editingLang === 'ar' ? siteSettings?.footer_text : '') || ''} onChange={(e) => {
+                  if (editingLang === 'ar') setSiteSettings({...siteSettings, footer_text: e.target.value});
+                  else setSiteSettings({...siteSettings, translations: {...(siteSettings.translations||{}), [editingLang]: {...(siteSettings.translations?.[editingLang]||{}), footer_text: e.target.value}}});
+                }} className="w-full border p-3 rounded bg-slate-50" rows="3"></textarea></div>
+
               </div>
             </div>
 
