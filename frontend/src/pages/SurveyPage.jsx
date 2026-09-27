@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../services/supabase';
 import { motion } from 'framer-motion';
 
 const SurveyPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [survey, setSurvey] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -77,6 +78,11 @@ const SurveyPage = () => {
       }
       
       setSuccess(true);
+      if (survey.redirect_url) {
+        window.location.href = survey.redirect_url;
+      } else {
+        setTimeout(() => navigate('/'), 2000);
+      }
     } catch (err) {
       alert("حدث خطأ أثناء الإرسال: " + err.message);
       console.error(err);

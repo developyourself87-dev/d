@@ -321,7 +321,7 @@ const Dashboard = () => {
     try {
       const surveyPayload = {
         title: unifiedSurvey.title, description: unifiedSurvey.description, image_url: unifiedSurvey.image_url, is_visible: unifiedSurvey.is_visible,
-        image_layout: unifiedSurvey.image_layout, image_shape: unifiedSurvey.image_shape, 
+        image_layout: unifiedSurvey.image_layout, image_shape: unifiedSurvey.image_shape, redirect_url: unifiedSurvey.redirect_url, 
         image_border_enabled: unifiedSurvey.image_border_enabled, image_border_color: unifiedSurvey.image_border_color
       };
 
