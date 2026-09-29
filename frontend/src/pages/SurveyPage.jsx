@@ -11,6 +11,7 @@ const SurveyPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
   const [answers, setAnswers] = useState({});
@@ -77,10 +78,11 @@ const SurveyPage = () => {
         }
       }
       
-      setSuccess(true);
       if (survey.redirect_url) {
+        setIsRedirecting(true);
         window.location.href = survey.redirect_url;
       } else {
+        setSuccess(true);
         setTimeout(() => navigate('/'), 2000);
       }
     } catch (err) {
@@ -112,6 +114,18 @@ const SurveyPage = () => {
     </div>
   );
   
+  if (isRedirecting) return (
+    <div className="min-h-screen flex items-center justify-center p-4 neon-grid">
+      <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring' }} className="glass-card p-10 rounded-3xl glow-border text-center max-w-md w-full shadow-2xl">
+        <div className="flex justify-center mb-6">
+          <div className="w-16 h-16 rounded-full border-4 border-dark-border border-t-primary animate-spin"></div>
+        </div>
+        <h1 className="text-3xl font-black text-text-main mb-4">جاري التوجيه...</h1>
+        <p className="text-text-muted mb-4 leading-relaxed font-bold text-red-400">الرجاء الانتظار وعدم إغلاق الصفحة، جاري توجيهك للمرحلة التالية.</p>
+      </motion.div>
+    </div>
+  );
+
   if (success) return (
     <div className="min-h-screen flex items-center justify-center p-4 neon-grid">
       <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring' }} className="glass-card p-10 rounded-3xl glow-border text-center max-w-md w-full shadow-2xl">
