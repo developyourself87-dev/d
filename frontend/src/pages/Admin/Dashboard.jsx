@@ -102,16 +102,24 @@ const Dashboard = () => {
           }
         };
 
-        const [courses, registrations, comments, surveys, surveySubs, works] = await Promise.all([
+        const [courses, registrations, comments, surveys, surveySubs, works, viewsData] = await Promise.all([
           fetchCount('courses'),
           fetchCount('registrations'),
           fetchCount('comments'),
           fetchCount('surveys'),
           fetchCount('survey_submissions'),
-          fetchCount('works')
+          fetchCount('works'),
+          supabase.from('page_views').select('page_type')
         ]);
 
-        setStats({ courses, registrations, comments, surveys, surveySubs, works });
+        let homeViews = 0, courseViews = 0, surveyViews = 0;
+        (viewsData.data || []).forEach(v => {
+          if (v.page_type === 'home') homeViews++;
+          else if (v.page_type === 'course') courseViews++;
+          else if (v.page_type === 'survey') surveyViews++;
+        });
+
+        setStats({ courses, registrations, comments, surveys, surveySubs, works, homeViews, courseViews, surveyViews, totalViews: homeViews + courseViews + surveyViews });
       } else if (activeTab === 'courses') {
         const [cRes, vRes] = await Promise.all([
           supabase.from('courses').select('*').order('sort_order'),
@@ -496,13 +504,21 @@ const Dashboard = () => {
         {/* OVERVIEW (Fixed: Using length instead of count for accuracy) */}
         {activeTab === 'overview' && (
           <div><h2 className="text-3xl font-bold mb-6">نظرة عامة على النظام</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <div className="bg-white p-6 rounded-xl border border-blue-200 shadow-sm"><h3 className="text-slate-500 mb-2 font-bold">الدورات المطروحة</h3><p className="text-4xl font-bold text-blue-600">{stats.courses}</p></div>
               <div className="bg-white p-6 rounded-xl border border-green-200 shadow-sm"><h3 className="text-slate-500 mb-2 font-bold">تسجيلات الدورات (مشاركين)</h3><p className="text-4xl font-bold text-green-600">{stats.registrations}</p></div>
               <div className="bg-white p-6 rounded-xl border border-purple-200 shadow-sm"><h3 className="text-slate-500 mb-2 font-bold">الاستبيانات المُنتجة</h3><p className="text-4xl font-bold text-purple-600">{stats.surveys}</p></div>
               <div className="bg-white p-6 rounded-xl border border-orange-200 shadow-sm"><h3 className="text-slate-500 mb-2 font-bold">إجابات الاستبيانات (مشاركين)</h3><p className="text-4xl font-bold text-orange-600">{stats.surveySubs}</p></div>
               <div className="bg-white p-6 rounded-xl border border-teal-200 shadow-sm"><h3 className="text-slate-500 mb-2 font-bold">الإنجازات (الأعمال)</h3><p className="text-4xl font-bold text-teal-600">{stats.works}</p></div>
               <div className="bg-white p-6 rounded-xl border border-pink-200 shadow-sm"><h3 className="text-slate-500 mb-2 font-bold">التعليقات (المراجعات)</h3><p className="text-4xl font-bold text-pink-600">{stats.comments}</p></div>
+            </div>
+
+            <h3 className="text-2xl font-bold mb-4 border-t pt-6">إحصائيات الزيارات (المشاهدات)</h3>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <div className="bg-gradient-to-br from-indigo-50 to-white p-6 rounded-xl border border-indigo-200 shadow-sm"><h3 className="text-indigo-800 mb-2 font-bold text-sm">مجموع الزيارات (للكل)</h3><p className="text-4xl font-black text-indigo-600">{stats.totalViews || 0}</p></div>
+              <div className="bg-gradient-to-br from-cyan-50 to-white p-6 rounded-xl border border-cyan-200 shadow-sm"><h3 className="text-cyan-800 mb-2 font-bold text-sm">زيارات الصفحة الرئيسية</h3><p className="text-4xl font-black text-cyan-600">{stats.homeViews || 0}</p></div>
+              <div className="bg-gradient-to-br from-fuchsia-50 to-white p-6 rounded-xl border border-fuchsia-200 shadow-sm"><h3 className="text-fuchsia-800 mb-2 font-bold text-sm">زيارات الاستبيانات</h3><p className="text-4xl font-black text-fuchsia-600">{stats.surveyViews || 0}</p></div>
+              <div className="bg-gradient-to-br from-amber-50 to-white p-6 rounded-xl border border-amber-200 shadow-sm"><h3 className="text-amber-800 mb-2 font-bold text-sm">نقرات التسجيل في الدورات</h3><p className="text-4xl font-black text-amber-600">{stats.courseViews || 0}</p></div>
             </div>
           </div>
         )}

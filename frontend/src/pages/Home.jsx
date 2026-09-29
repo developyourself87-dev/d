@@ -60,6 +60,9 @@ const Home = () => {
 
   useEffect(() => {
     async function fetchData() {
+      // Record home page view
+      supabase.from('page_views').insert([{ page_type: 'home', page_id: '00000000-0000-0000-0000-000000000000' }]).then();
+
       const [{ data: trainerData }, { data: worksData }, { data: commentsData }, { data: settingsData }] = await Promise.all([
         supabase.from('trainer_profile').select('*').single(),
         supabase.from('works').select('*').eq('is_visible', true).order('sort_order'),
