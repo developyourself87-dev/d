@@ -113,12 +113,22 @@ const Dashboard = () => {
 
         setStats({ courses, registrations, comments, surveys, surveySubs, works });
       } else if (activeTab === 'courses') {
-        const { data } = await supabase.from('courses').select('*').order('sort_order');
-        setCourses(data || []);
+        const [cRes, vRes] = await Promise.all([
+          supabase.from('courses').select('*').order('sort_order'),
+          supabase.from('page_views').select('page_id').eq('page_type', 'course')
+        ]);
+        const viewsCount = {};
+        (vRes.data || []).forEach(v => { viewsCount[v.page_id] = (viewsCount[v.page_id] || 0) + 1; });
+        setCourses((cRes.data || []).map(c => ({...c, views: viewsCount[c.id] || 0})));
       } else if (activeTab === 'surveys') {
-        const { data, error } = await supabase.from('surveys').select('*');
-        if (error) console.error('Surveys fetch error:', error);
-        setSurveys(data || []);
+        const [sRes, vRes] = await Promise.all([
+          supabase.from('surveys').select('*'),
+          supabase.from('page_views').select('page_id').eq('page_type', 'survey')
+        ]);
+        const viewsCount = {};
+        (vRes.data || []).forEach(v => { viewsCount[v.page_id] = (viewsCount[v.page_id] || 0) + 1; });
+        if (sRes.error) console.error('Surveys fetch error:', sRes.error);
+        setSurveys((sRes.data || []).map(s => ({...s, views: viewsCount[s.id] || 0})));
       } else if (activeTab === 'works') {
         const { data } = await supabase.from('works').select('*').order('sort_order');
         setWorks(data || []);
@@ -126,12 +136,19 @@ const Dashboard = () => {
         const { data } = await supabase.from('comments').select('*').order('created_at', { ascending: false });
         setComments(data || []);
       } else if (activeTab === 'archive') {
-        const [cRes, sRes] = await Promise.all([
+        const [cRes, sRes, vRes] = await Promise.all([
           supabase.from('courses').select('*').order('sort_order'),
-          supabase.from('surveys').select('*')
+          supabase.from('surveys').select('*'),
+          supabase.from('page_views').select('page_id, page_type')
         ]);
-        setCourses(cRes.data || []);
-        setSurveys(sRes.data || []);
+        const courseViews = {};
+        const surveyViews = {};
+        (vRes.data || []).forEach(v => {
+          if (v.page_type === 'course') courseViews[v.page_id] = (courseViews[v.page_id] || 0) + 1;
+          if (v.page_type === 'survey') surveyViews[v.page_id] = (surveyViews[v.page_id] || 0) + 1;
+        });
+        setCourses((cRes.data || []).map(c => ({...c, views: courseViews[c.id] || 0})));
+        setSurveys((sRes.data || []).map(s => ({...s, views: surveyViews[s.id] || 0})));
       } else if (activeTab === 'settings') {
         const [setRes, profRes, langRes] = await Promise.all([
           supabase.from('site_settings').select('*').single(),
@@ -626,7 +643,7 @@ const Dashboard = () => {
                     <tr key={s.id}>
                       <td className="p-4">
                         <div className="font-bold text-lg mb-1">{s.title}</div>
-                        <div className="text-sm text-slate-500">حالة الرابط: {s.is_visible ? <span className="text-green-600">متاح للزوار</span> : <span className="text-red-500">مغلق</span>}</div>
+                        <div className="text-sm text-slate-500">حالة الرابط: {s.is_visible ? <span className="text-green-600">متاح للزوار</span> : <span className="text-red-500">مغلق</span>} | عدد الزيارات: <span className="font-bold text-blue-600">{s.views || 0}</span></div>
                       </td>
                       <td className="p-4 flex gap-2">
                         <button onClick={() => copyLink(s.id)} className="bg-green-100 text-green-700 px-4 py-2 rounded font-bold hover:bg-green-200">نسخ رابط المشاركة</button>
@@ -697,7 +714,7 @@ const Dashboard = () => {
             <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
               <table className="w-full text-right"><thead className="bg-slate-50 border-b"><tr><th className="p-4">اسم الدورة</th><th className="p-4">إجراءات</th></tr></thead><tbody className="divide-y">
                   {(courses || []).map(c => (
-                    <tr key={c.id}><td className="p-4 font-bold">{c.title}</td>
+                    <tr key={c.id}><td className="p-4 font-bold">{c.title} <span className="text-sm text-blue-600 mr-2">(الزيارات: {c.views || 0})</span></td>
                       <td className="p-4 flex gap-2">
                         <button onClick={() => loadCourseBuilder(c)} className="bg-purple-100 text-purple-700 px-4 py-1 rounded font-bold hover:bg-purple-200">تخصيص أسئلة التسجيل</button>
                         <button onClick={() => { setCurrentCourse(c); setIsEditingCourse(true); }} className="bg-blue-100 text-blue-700 px-4 py-1 rounded font-bold hover:bg-blue-200">تعديل الدورة</button>
@@ -761,13 +778,13 @@ const Dashboard = () => {
               <div>
                 <h3 className="text-xl font-bold mb-4 text-purple-700 border-b pb-2">الاستبيانات العامة</h3>
                 <div className="space-y-4">
-                  {(surveys || []).map(s => (<div key={s.id} onClick={() => loadArchiveDetails(s, 'survey')} className="bg-white p-4 rounded-xl border cursor-pointer hover:border-purple-500 transition-colors"><h4 className="font-bold">{s.title}</h4></div>))}
+                  {(surveys || []).map(s => (<div key={s.id} onClick={() => loadArchiveDetails(s, 'survey')} className="bg-white p-4 rounded-xl border cursor-pointer hover:border-purple-500 transition-colors flex justify-between"><h4 className="font-bold">{s.title}</h4><span className="text-sm font-bold text-purple-600 bg-purple-100 px-2 py-1 rounded">زيارات: {s.views || 0}</span></div>))}
                 </div>
               </div>
               <div>
                 <h3 className="text-xl font-bold mb-4 text-blue-700 border-b pb-2">الدورات التدريبية</h3>
                 <div className="space-y-4">
-                  {(courses || []).map(c => (<div key={c.id} onClick={() => loadArchiveDetails(c, 'course')} className="bg-white p-4 rounded-xl border cursor-pointer hover:border-blue-500 transition-colors"><h4 className="font-bold">{c.title}</h4></div>))}
+                  {(courses || []).map(c => (<div key={c.id} onClick={() => loadArchiveDetails(c, 'course')} className="bg-white p-4 rounded-xl border cursor-pointer hover:border-blue-500 transition-colors flex justify-between"><h4 className="font-bold">{c.title}</h4><span className="text-sm font-bold text-blue-600 bg-blue-100 px-2 py-1 rounded">نقرات التسجيل: {c.views || 0}</span></div>))}
                 </div>
               </div>
             </div>

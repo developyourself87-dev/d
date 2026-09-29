@@ -35,6 +35,9 @@ const SurveyPage = () => {
           .eq('survey_id', id)
           .order('sort_order');
         setQuestions(qData || []);
+        
+        // Record page view
+        supabase.from('page_views').insert([{ page_type: 'survey', page_id: id }]).then();
       } catch (err) {
         setError(err.message);
       } finally {

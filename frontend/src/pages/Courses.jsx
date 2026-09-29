@@ -21,6 +21,15 @@ const Courses = () => {
     fetchCourses();
   }, []);
 
+  const handleRegisterClick = async (course) => {
+    setSelectedCourse(course);
+    try {
+      await supabase.from('page_views').insert([{ page_type: 'course', page_id: course.id }]);
+    } catch (e) {
+      console.error('Failed to record page view', e);
+    }
+  };
+
   const fadeUp = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.2, ease: "easeOut" } }
@@ -74,7 +83,7 @@ const Courses = () => {
                   </div>
                   
                   <button 
-                    onClick={() => setSelectedCourse(course)}
+                    onClick={() => handleRegisterClick(course)}
                     className="w-full neon-btn py-4 px-4 rounded-xl text-sm font-bold tracking-wider uppercase"
                   >
                     {t('register')}
